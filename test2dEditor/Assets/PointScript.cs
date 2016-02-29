@@ -1,19 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class PointScript : MonoBehaviour {
+public class PointScript : MonoBehaviour
+{
     public bool _changePosition;
     private bool _lineCreate;
     private bool _destroy=false;
     private GameObject _Create_Line;
+    public int id;
     Vector2 mousePos;
-	// Use this for initialization
-	void Start () 
+	// Use this for initialization    
+	void Start ()
     {
         _Create_Line = GameObject.FindGameObjectWithTag("Create_line");
         changePosition();
 	}
-	
+
+    public int ID
+    {
+        set
+        {
+            id = value;
+            transform.gameObject.name = id.ToString()+"_Point";
+
+        }
+        get
+        {
+            return id;
+        }
+    }
+
 	// Update is called once per frame
 	void Update () 
     {
@@ -62,7 +79,6 @@ public class PointScript : MonoBehaviour {
         
 
     }
-
     void OnMouseDown() 
     {
         if (_destroy)

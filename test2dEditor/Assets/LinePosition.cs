@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class LinePosition : MonoBehaviour {
 
     public GameObject point1;
@@ -8,7 +9,7 @@ public class LinePosition : MonoBehaviour {
     private Vector2 pointPos1;
     private Vector2 pointPos2;
     LineRenderer _lineRenderer;
-
+    public int id;
 	// Use this for initialization
 	void Start () 
     {
@@ -49,6 +50,8 @@ public class LinePosition : MonoBehaviour {
         set
         {
             point1 = value;
+            PointScript _pointID=value.GetComponent<PointScript>();
+            SaveAnimParam.linesAndPoints1.Add(id, _pointID.ID);
         }
     }
     public GameObject Point2
@@ -56,6 +59,22 @@ public class LinePosition : MonoBehaviour {
         set
         {
             point2 = value;
+            PointScript _pointID = value.GetComponent<PointScript>();
+            SaveAnimParam.linesAndPoints2.Add(id, _pointID.ID);
+        }
+    }
+
+    public int ID
+    {
+        set
+        {
+            id = value;
+            transform.gameObject.name = id.ToString() + "_Line";
+
+        }
+        get
+        {
+            return id;
         }
     }
 }
