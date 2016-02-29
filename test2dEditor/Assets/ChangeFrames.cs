@@ -61,7 +61,25 @@ public class ChangeFrames : MonoBehaviour {
             ChangeFrame();
             frames[tempNumber-1].gameObject.tag = "cur_frame";
             frames[tempNumber-1].gameObject.SetActive(true);
+        }        
+    }
+
+    public void setActiveAllFrames()
+    {
+        foreach (GameObject i in frames)
+        {
+            i.gameObject.SetActive(true);
         }
-        
+    }
+    public void unsetActiveAllFrames()
+    {
+        foreach (GameObject i in frames)
+        {
+            if(i.gameObject.tag == "Untagged")
+            {
+                i.gameObject.SetActive(false);
+            }
+            
+        }
     }
 }
