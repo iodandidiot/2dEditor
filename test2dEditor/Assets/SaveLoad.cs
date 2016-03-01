@@ -8,25 +8,31 @@ using System.IO;
 public class SaveLoad : MonoBehaviour
 {
     public static GameObject curFrame;
-    public static List<Node> savedAnim = new List<Node>();
-
+    //public static List<Node> savedAnim = new List<Node>();
+    public static Node savedAnim;
     public static void Save()
     {
         Node curNode=new Node();
-        BinaryFormatter txt = new BinaryFormatter();
+        BinaryFormatter bf = new BinaryFormatter();
         print(Application.persistentDataPath);
-        FileStream file = File.Create(Application.persistentDataPath + "/savedanim.txt");
-        txt.Serialize(file, SaveLoad.savedAnim);
+        FileStream file = File.Create(Application.persistentDataPath + "/savedanim.oi");
+        bf.Serialize(file, curNode);
         file.Close();
     }
     public static void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/savedanim.txt"))
+        if (File.Exists(Application.persistentDataPath + "/savedanim.oi"))
         {
+            SaveAnimParam.countFrames = 0;//Количетсво фреймов анимации
+            SaveAnimParam.pointsAndParents.Clear();
+            SaveAnimParam.linesAndParents.Clear();
+            SaveAnimParam.linesAndPoints1.Clear();
+            SaveAnimParam.linesAndPoints2.Clear();
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/savedanim.txt", FileMode.Open);
-            SaveLoad.savedAnim = (List<Node>)bf.Deserialize(file);
+            FileStream file = File.Open(Application.persistentDataPath + "/savedanim.oi", FileMode.Open);
+            SaveLoad.savedAnim = (Node)bf.Deserialize(file);
             file.Close();
+            SaveLoad.savedAnim.AfterLoad();
         }
     }
 }

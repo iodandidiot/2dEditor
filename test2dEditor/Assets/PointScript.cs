@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Generic;
 
 public class PointScript : MonoBehaviour
 {
@@ -68,8 +69,8 @@ public class PointScript : MonoBehaviour
     }
 
     void OnDestroy() 
-    {
-        
+    {        
+        SaveAnimParam.pointsAndParents.Remove(id);
         GameObject pointButton = GameObject.FindGameObjectWithTag("point_button");
         if (pointButton != null)
         {

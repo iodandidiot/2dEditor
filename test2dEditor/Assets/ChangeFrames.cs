@@ -7,18 +7,22 @@ using UnityEngine.UI;
 public class ChangeFrames : MonoBehaviour {
     public GameObject frame;
     public List<GameObject> frames;
-    public int number=1;
-    public int tempNumber = 1;
+    public int number=0;
+    public int tempNumber = 0;
     private GameObject AnimParent;
+    public Text frameNumber;
 	// Use this for initialization
 	void Start () 
     {
-        AnimParent = GameObject.FindGameObjectWithTag("animParent");
-        GameObject frame1=(GameObject)Instantiate(frame, new Vector2(0, 0), Quaternion.identity);
-        frames.Add(frame1);
-        frame1.gameObject.transform.name = number.ToString();
-        SaveAnimParam.countFrames++;
-        print(SaveAnimParam.countFrames);
+        frameNumber.text = "0";
+        //AnimParent = GameObject.FindGameObjectWithTag("animParent");
+        //GameObject frame1=(GameObject)Instantiate(frame, new Vector2(0, 0), Quaternion.identity);
+        //frames.Add(frame1);
+        //frame1.gameObject.transform.name ="frame_"+number.ToString();
+        //FramesScript frameScript = frame1.GetComponent<FramesScript>();
+        //frameScript.ID = number;
+        //SaveAnimParam.countFrames++;
+        //print(SaveAnimParam.countFrames);
 	}
 	
 	// Update is called once per frame
@@ -29,9 +33,12 @@ public class ChangeFrames : MonoBehaviour {
         frames.Add(nextframe);
         number++;
         tempNumber = number;
-        nextframe.gameObject.transform.name = number.ToString();
+        nextframe.gameObject.transform.name = "frame_" + number.ToString();
+        FramesScript frameScript = nextframe.GetComponent<FramesScript>();
+        frameScript.ID = number;
         SaveAnimParam.countFrames++;
         print(SaveAnimParam.countFrames);
+        frameNumber.text = string.Format("{0}", tempNumber);
 	}
 
     void ChangeFrame()
@@ -51,7 +58,8 @@ public class ChangeFrames : MonoBehaviour {
             ChangeFrame();
             frames[tempNumber-1].gameObject.tag = "cur_frame";
             frames[tempNumber-1].gameObject.SetActive(true);
-        }        
+        }
+        frameNumber.text = string.Format("{0}", tempNumber);
     }
     public void NextFrame()
     {
@@ -61,7 +69,8 @@ public class ChangeFrames : MonoBehaviour {
             ChangeFrame();
             frames[tempNumber-1].gameObject.tag = "cur_frame";
             frames[tempNumber-1].gameObject.SetActive(true);
-        }        
+        }
+        frameNumber.text = string.Format("{0}", tempNumber);
     }
 
     public void setActiveAllFrames()
@@ -81,5 +90,44 @@ public class ChangeFrames : MonoBehaviour {
             }
             
         }
+    }
+
+    public void CreateFrameAfterLoad(int count)
+    {
+        foreach (GameObject i in frames)
+        {
+            Destroy(i.gameObject);
+        }
+        SaveAnimParam.countFrames = 0;
+
+        frames.Clear();
+        number = 0;
+        tempNumber = 0;
+        for (int i = 0; i < count; i++)
+        {
+            //ChangeFrame();
+            GameObject nextframe = (GameObject)Instantiate(frame, new Vector2(0, 0), Quaternion.identity);
+            frames.Add(nextframe);
+            number++;
+            tempNumber = number;
+            nextframe.gameObject.transform.name = "frame_" + number.ToString();
+            FramesScript frameScript = nextframe.GetComponent<FramesScript>();
+            frameScript.ID = number;
+            SaveAnimParam.countFrames++;
+            print(SaveAnimParam.countFrames);
+        }
+
+    }
+    public void ChangeFrameAfterLoad()
+    {
+        foreach (GameObject i in frames)
+        {
+            i.gameObject.tag = "Untagged";
+            i.gameObject.SetActive(false);
+        }
+        frames[0].gameObject.tag = "cur_frame";
+        frames[0].gameObject.SetActive(true);
+        tempNumber = 1;
+        frameNumber.text = string.Format("{0}", tempNumber);
     }
 }
