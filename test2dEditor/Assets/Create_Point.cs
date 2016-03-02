@@ -13,19 +13,24 @@ public class Create_Point : MonoBehaviour {
     public event CreateLine onCreate;
     GameObject curFrame;
     private int points_id=0;
-    public void _CreatePoint()
+    private bool start = false;
+    public void _CreatePoint()//создать новую опорную точку
     {
-        curFrame = GameObject.FindGameObjectWithTag("cur_frame");
-        lastPoint=(GameObject)Instantiate(point, new Vector2(0,0), Quaternion.identity);
-        PointScript lastPoinScript = lastPoint.GetComponent<PointScript>();
-        lastPoinScript.ID = points_id;
-        onCreateLine += lastPoinScript.CreateLine;
-        onDestroyPoint += lastPoinScript.DestroyPoint;
-        onCreate += lastPoinScript.CreatePoint;
-        lastPoint.transform.parent = curFrame.transform;
-        FramesScript frameScript = curFrame.GetComponent<FramesScript>();
-        SaveAnimParam.pointsAndParents.Add(points_id, frameScript.ID);
-        points_id++;
+        if (start)
+        {
+            curFrame = GameObject.FindGameObjectWithTag("cur_frame");
+            lastPoint = (GameObject)Instantiate(point, new Vector2(0, 0), Quaternion.identity);
+            PointScript lastPoinScript = lastPoint.GetComponent<PointScript>();
+            lastPoinScript.ID = points_id;
+            onCreateLine += lastPoinScript.CreateLine;
+            onDestroyPoint += lastPoinScript.DestroyPoint;
+            onCreate += lastPoinScript.CreatePoint;
+            lastPoint.transform.parent = curFrame.transform;
+            FramesScript frameScript = curFrame.GetComponent<FramesScript>();
+            SaveAnimParam.pointsAndParents.Add(points_id, frameScript.ID);
+            points_id++;
+        }
+        
     }
     public void _onCreateLine()
     {
@@ -36,18 +41,18 @@ public class Create_Point : MonoBehaviour {
         onDestroyPoint();
     }
 
-    public void UnsignAndDestroy(GameObject unsign)
+    public void UnsignAndDestroy(GameObject unsign)//отписать точку перед удалением
     {
         PointScript _unsign = unsign.GetComponent<PointScript>();
         onCreateLine -= _unsign.CreateLine;
         onDestroyPoint -= _unsign.DestroyPoint;
         onCreate -= _unsign.CreatePoint;
-        //Destroy(unsign.gameObject);
     }
 
-    public void _CreatePointAfterLoad(Dictionary<int, int> pointsAndParents,Dictionary<int, Vector2Serializer> pointsAndPosition)
+    public void _CreatePointAfterLoad(Dictionary<int, int> pointsAndParents, Dictionary<int, Vector2Serializer> pointsAndPosition)//создать точки после загрузки
     {
         points_id=0;
+        start = true;
         foreach (int i in pointsAndParents.Keys)
         {
             string frameName = string.Format("{0}", pointsAndParents[i]);
@@ -60,9 +65,14 @@ public class Create_Point : MonoBehaviour {
             onCreate += lastPoinScript.CreatePoint;
             lastPoint.transform.parent = curFrame.transform;
             FramesScript frameScript = curFrame.GetComponent<FramesScript>();
-            SaveAnimParam.pointsAndParents.Add(points_id, frameScript.ID);
+            //SaveAnimParam.pointsAndParents.Add(points_id, frameScript.ID);
+            SaveAnimParam.pointsAndParents.Add(i, frameScript.ID);
             points_id=i+1;
         }
 
+    }
+    public void onStart()
+    {
+        start = true;
     }
 }

@@ -11,23 +11,17 @@ public class ChangeFrames : MonoBehaviour {
     public int tempNumber = 0;
     private GameObject AnimParent;
     public Text frameNumber;
+    public Text startText;
 	// Use this for initialization
 	void Start () 
     {
         frameNumber.text = "0";
-        //AnimParent = GameObject.FindGameObjectWithTag("animParent");
-        //GameObject frame1=(GameObject)Instantiate(frame, new Vector2(0, 0), Quaternion.identity);
-        //frames.Add(frame1);
-        //frame1.gameObject.transform.name ="frame_"+number.ToString();
-        //FramesScript frameScript = frame1.GetComponent<FramesScript>();
-        //frameScript.ID = number;
-        //SaveAnimParam.countFrames++;
-        //print(SaveAnimParam.countFrames);
 	}
 	
 	// Update is called once per frame
 	public void CreateFrame()
     {
+        startText.gameObject.SetActive(false);
         ChangeFrame();
         GameObject nextframe = (GameObject)Instantiate(frame, new Vector2(0, 0), Quaternion.identity);
         frames.Add(nextframe);
@@ -94,6 +88,7 @@ public class ChangeFrames : MonoBehaviour {
 
     public void CreateFrameAfterLoad(int count)
     {
+        startText.gameObject.SetActive(false);
         foreach (GameObject i in frames)
         {
             Destroy(i.gameObject);

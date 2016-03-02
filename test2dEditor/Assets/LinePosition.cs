@@ -29,8 +29,7 @@ public class LinePosition : MonoBehaviour {
         }
         else
         {
-            //SaveAnimParam.linesAndPoints1.Remove(id);
-            //SaveAnimParam.linesAndPoints2.Remove(id);
+
             SaveAnimParam.linesAndParents.Remove(id);
             Destroy(gameObject);
         }
@@ -44,8 +43,7 @@ public class LinePosition : MonoBehaviour {
         }
         else
         {
-            //SaveAnimParam.linesAndPoints1.Remove(id);
-            //SaveAnimParam.linesAndPoints2.Remove(id);
+
             SaveAnimParam.linesAndParents.Remove(id);
             Destroy(gameObject);
         }

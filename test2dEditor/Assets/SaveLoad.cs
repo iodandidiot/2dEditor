@@ -8,7 +8,6 @@ using System.IO;
 public class SaveLoad : MonoBehaviour
 {
     public static GameObject curFrame;
-    //public static List<Node> savedAnim = new List<Node>();
     public static Node savedAnim;
     public static void Save()
     {

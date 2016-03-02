@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public static class SaveAnimParam 
+public static class SaveAnimParam//Статический класс для запоминания параметров
 {
     public static int countFrames=0;//Количетсво фреймов анимации
     public static Dictionary<int, int> pointsAndParents=new Dictionary<int,int>();//привязка точек к кадру
@@ -14,7 +14,7 @@ public static class SaveAnimParam
 }
 
     [System.Serializable]
-    public class Vector2Serializer
+public class Vector2Serializer//класс который мы сериализуем в файл
     {
         public float x;
         public float y;
@@ -35,7 +35,7 @@ public static class SaveAnimParam
 
 
     [System.Serializable]
-    public class Node
+    public class Node//класс который мы сериализуем в файл
     {
 
         public int countFrames = 0;//Количетсво фреймов анимации
@@ -63,12 +63,13 @@ public static class SaveAnimParam
             {
                 string pointName = i.ToString() + "_Point";
                 GameObject point = GameObject.Find(pointName);
-                pointsAndPosition.Add(i,new Vector2Serializer((Vector2)point.transform.position));
+                pointsAndPosition.Add(i, new Vector2Serializer((Vector2)point.transform.position));
+                
             }
             _changeFrames.unsetActiveAllFrames();
         }
 
-        public void AfterLoad()
+        public void AfterLoad()//загрузить по очереди все фреймы, точки и линии
         {            
             GameObject CreateFrame = GameObject.Find("CreateFrame");
             ChangeFrames _ChangeFrames = CreateFrame.GetComponent<ChangeFrames>();

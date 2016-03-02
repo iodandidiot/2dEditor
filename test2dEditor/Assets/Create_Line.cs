@@ -12,25 +12,30 @@ public class Create_Line : MonoBehaviour {
     private bool point = false;
     GameObject curFrame;
     private int lines_id = 0;
+    private bool start = false;
 	// Use this for initialization
-	
-    public void CheckPositionLine()
+
+    public void CheckPositionLine()//создать линию по двум точкам 
     {
-        curFrame = GameObject.FindGameObjectWithTag("cur_frame");
-        lastLine = (GameObject)Instantiate(line, new Vector2(0, 0), Quaternion.identity);
-        LineRenderer _lineRenderer = lastLine.GetComponent<LineRenderer>();
-        _lineRenderer.SetPositions(linePoints);
-        LinePosition _linePoints = lastLine.AddComponent<LinePosition>();
-        _linePoints.ID = lines_id;
-        _linePoints.Point1 = linePointsObject[0];
-        _linePoints.Point2 = linePointsObject[1];
-        lastLine.transform.parent = curFrame.transform;
-        point = false;
-        FramesScript frameScript = curFrame.GetComponent<FramesScript>();
-        SaveAnimParam.linesAndParents.Add(lines_id, frameScript.ID);        
-        lines_id++;
+        if (start)
+        {
+            curFrame = GameObject.FindGameObjectWithTag("cur_frame");
+            lastLine = (GameObject)Instantiate(line, new Vector2(0, 0), Quaternion.identity);
+            LineRenderer _lineRenderer = lastLine.GetComponent<LineRenderer>();
+            _lineRenderer.SetPositions(linePoints);
+            LinePosition _linePoints = lastLine.AddComponent<LinePosition>();
+            _linePoints.ID = lines_id;
+            _linePoints.Point1 = linePointsObject[0];
+            _linePoints.Point2 = linePointsObject[1];
+            lastLine.transform.parent = curFrame.transform;
+            point = false;
+            FramesScript frameScript = curFrame.GetComponent<FramesScript>();
+            SaveAnimParam.linesAndParents.Add(lines_id, frameScript.ID);
+            lines_id++;
+        }
+        
     }
-    public void ChangePoints(Vector2 pointPosition,GameObject _pointObject)
+    public void ChangePoints(Vector2 pointPosition, GameObject _pointObject)//получаем точки
     {
         if (!point)
         {
@@ -51,11 +56,13 @@ public class Create_Line : MonoBehaviour {
     }
 
 
-    public void CreateLineAfterLoad(Dictionary<int, int> linesAndParents, Dictionary<int, int> linesAndPoints1,Dictionary<int, int> linesAndPoints2)
+    public void CreateLineAfterLoad(Dictionary<int, int> linesAndParents, Dictionary<int, int> linesAndPoints1, Dictionary<int, int> linesAndPoints2)//создать линии по двум точкам после загрузки
     {
         lines_id = 0;
+        start = true;
         foreach (int i in linesAndParents.Keys)
         {
+            
             string frameName = string.Format("{0}", linesAndParents[i]);
             curFrame = GameObject.Find("frame_" + frameName);
             lastLine = (GameObject)Instantiate(line, new Vector2(0, 0), Quaternion.identity);
@@ -74,8 +81,12 @@ public class Create_Line : MonoBehaviour {
             _linePoints.Point2 = point2;
             point = false;
             FramesScript frameScript = curFrame.GetComponent<FramesScript>();
-            SaveAnimParam.linesAndParents.Add(lines_id, frameScript.ID);
+            SaveAnimParam.linesAndParents.Add(i, frameScript.ID);
             lines_id=i+1;           
         }
+    }
+    public void onStart()
+    {
+        start = true;
     }
 }
